@@ -5,6 +5,10 @@ import { Route } from "@/types/route.types"
 
 export const ROUTES: Route[] = [
   {
+    name: "Inicio",
+    path: "/",
+  },
+  {
     name: "Clases",
     path: "/classes",
     icon: FaCalendarPlus,
