@@ -1,11 +1,17 @@
 "use client"
 
 import {
+  Button,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Navbar,
   NavbarContent,
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
+  useDisclosure,
 } from "@nextui-org/react"
 import { usePathname, useRouter } from "next/navigation"
 
@@ -13,16 +19,24 @@ import Image from "next/image"
 import Link from "next/link"
 import { ROUTES } from "@/constants/routes"
 import logo from "@/assets/images/logoHercules.png"
+import { useAuthStore } from "@/store/auth"
 import { useState } from "react"
 
 const Header = () => {
   const [theme, setTheme] = useState("bg-transparent")
   const pathname = usePathname()
+  const { user, signOut } = useAuthStore()
+
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
 
   const handleTheme = () => {
     setTheme((prev) =>
       prev === "bg-transparent" ? "bg-purple-regular" : "bg-transparent"
     )
+  }
+
+  const logout = () => {
+    signOut()
   }
 
   return (
@@ -41,7 +55,7 @@ const Header = () => {
         <Image src={logo} alt="Hércules Logo" width={60} height={60} />
       </NavbarContent>
       <NavbarContent justify="end">
-        <p className="font-bold text-sm">Gianluca Bredice</p>
+        <p className="font-bold text-sm">{user?.name}</p>
       </NavbarContent>
       <NavbarMenu>
         {ROUTES.map((route) => {
@@ -53,7 +67,21 @@ const Header = () => {
             </Link>
           )
         })}
+        <NavbarMenuItem onClick={onOpen} className="text-danger">
+          Salir
+        </NavbarMenuItem>
       </NavbarMenu>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          <ModalHeader>¿Estás seguro que deseas cerrar sesión?</ModalHeader>
+          <ModalFooter>
+            <Button onClick={onClose}>Cancelar</Button>
+            <Button onClick={logout} className="text-white bg-purple-bold">
+              Confirmar
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Navbar>
   )
 }
