@@ -1,6 +1,6 @@
 import { Button } from "@nextui-org/react"
 import { Route } from "@/types/route.types"
-import { useRouter } from "next/navigation"
+import { useRouter } from "next-nprogress-bar"
 
 const MenuItem = ({ data }: { data: Route }) => {
   const { push } = useRouter()

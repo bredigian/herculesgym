@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 
+import { AppProgressBar } from "next-nprogress-bar"
 import { Auth } from "@/screens/Auth"
 import Header from "@/components/Header"
 import { NextUIProvider } from "@nextui-org/react"
@@ -36,6 +37,12 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
           {children}
         </>
       )}
+      <AppProgressBar
+        height="4px"
+        color="#3B3F77"
+        options={{ showSpinner: false }}
+        shallowRouting={true}
+      />
       <Toaster theme="light" />
     </NextUIProvider>
   )

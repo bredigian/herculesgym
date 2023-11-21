@@ -29,6 +29,8 @@ const Header = () => {
 
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   const handleTheme = () => {
     setTheme((prev) =>
       prev === "bg-transparent" ? "bg-purple-regular" : "bg-transparent"
@@ -47,6 +49,8 @@ const Header = () => {
         menuItem: "text-xl",
       }}
       isBlurred
+      isMenuOpen={isMenuOpen}
+      onMenuOpenChange={(open) => setIsMenuOpen(open)}
     >
       <NavbarContent justify="center">
         <NavbarMenuToggle onChange={handleTheme} />
@@ -61,7 +65,10 @@ const Header = () => {
         {ROUTES.map((route) => {
           return (
             <Link key={route.path} href={route.path}>
-              <NavbarMenuItem isActive={pathname === route.path}>
+              <NavbarMenuItem
+                onClick={() => setIsMenuOpen(false)}
+                isActive={pathname === route.path}
+              >
                 {route.name}
               </NavbarMenuItem>
             </Link>
