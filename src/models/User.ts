@@ -17,7 +17,6 @@ export const UserSchema = new Schema<User>(
     },
     password: {
       type: String,
-      required: true,
       trim: true,
     },
   },
