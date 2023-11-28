@@ -16,14 +16,11 @@ import {
 import { useEffect, useState } from "react"
 
 import { COLUMNS } from "@/constants/columns"
-import { Class } from "@/types/classes.types"
 import { Inscription } from "@/types/inscription.types"
 import { Schedule } from "@/types/schedule.types"
 import Screen from "@/components/Screen"
 import Subtitle from "@/components/Subtitle"
 import Title from "@/components/Title"
-import { User } from "@/types/user.types"
-import { set } from "mongoose"
 import { toast } from "sonner"
 import { useAuthStore } from "@/store/auth"
 import { useClassesStore } from "@/store/classes"
@@ -48,6 +45,7 @@ const Classes = () => {
   } = useForm<FormData>()
 
   const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
 
   const [schedules, setSchedules] = useState<Schedule[]>([])
 
@@ -76,6 +74,7 @@ const Classes = () => {
   }
 
   const onSubmit = async (formData: FormData) => {
+    setSubmitting(true)
     const inscription: Inscription = {
       class: formData.class,
       schedule: formData.schedule,
@@ -90,6 +89,7 @@ const Classes = () => {
     } catch (error: any) {
       toast.error(error.message)
     }
+    setSubmitting(false)
   }
 
   useEffect(() => {
@@ -196,6 +196,7 @@ const Classes = () => {
           <Button
             type="submit"
             className="bg-purple-bold self-center text-white"
+            isLoading={submitting}
           >
             Confirmar
           </Button>

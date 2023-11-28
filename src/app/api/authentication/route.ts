@@ -11,13 +11,13 @@ export const POST = async (req: Request) => {
   await connectToDB()
 
   try {
-    const formattedName = formatName(userdata.name)
+    const formattedName = formatName(userdata.name as string)
     if (!formattedName) throw new Error("El nombre no es valido")
 
     const userExists = await User.findOne({ username: userdata.username })
     if (userExists) throw new Error("El usuario ya existe")
 
-    const hashedPassword = await hashPassword(userdata.password)
+    const hashedPassword = await hashPassword(userdata.password as string)
 
     const user = new User({
       ...userdata,

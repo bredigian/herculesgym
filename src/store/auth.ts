@@ -22,7 +22,7 @@ export const useAuthStore = create((set: any) => ({
     if (!response.ok) throw new Error(message)
 
     localStorage.setItem("token", token)
-    localStorage.setItem("user_id", user._id)
+    localStorage.setItem("user_id", user._id as string)
     set({ user })
   },
 
@@ -42,7 +42,7 @@ export const useAuthStore = create((set: any) => ({
     if (!response.ok) throw new Error(message)
 
     localStorage.setItem("token", token)
-    localStorage.setItem("user_id", user._id)
+    localStorage.setItem("user_id", user._id as string)
     set({ user, token })
   },
 
