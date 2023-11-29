@@ -1,26 +1,14 @@
 "use client"
 
-import {
-  Button,
-  CircularProgress,
-  Select,
-  SelectItem,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@nextui-org/react"
+import { Button, CircularProgress, Select, SelectItem } from "@nextui-org/react"
 import { useEffect, useState } from "react"
 
-import { COLUMNS } from "@/constants/columns"
 import { Class } from "@/types/classes.types"
-import { Date } from "@/types/date.types"
 import { Inscription } from "@/types/inscription.types"
 import { Schedule } from "@/types/schedule.types"
 import Screen from "@/components/Screen"
 import Subtitle from "@/components/Subtitle"
+import TableBook from "@/components/TableBook"
 import Title from "@/components/Title"
 import { toast } from "sonner"
 import { useAuthStore } from "@/store/auth"
@@ -179,33 +167,7 @@ const Classes = () => {
               Todavía no estás inscripto en ninguna clase.
             </p>
           ) : (
-            <Table removeWrapper aria-label="Inscriptions table">
-              <TableHeader columns={COLUMNS}>
-                {(column) => (
-                  <TableColumn
-                    className={`bg-purple-regular text-black font-bold ${
-                      column.key === "class" ? "text-start" : "text-end"
-                    }`}
-                    key={column.key}
-                    width={column.key === "class" ? "70%" : "30%"}
-                  >
-                    {column.name}
-                  </TableColumn>
-                )}
-              </TableHeader>
-              <TableBody>
-                {inscriptions.map((item) => {
-                  return (
-                    <TableRow key={item._id}>
-                      <TableCell>{item.class.name}</TableCell>
-                      <TableCell className="text-end font-semibold">
-                        {item.schedule}
-                      </TableCell>
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-            </Table>
+            <TableBook inscriptions={inscriptions} isDetailed={false} />
           )}
           <Button
             type="submit"

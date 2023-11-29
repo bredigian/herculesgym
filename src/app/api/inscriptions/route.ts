@@ -119,3 +119,45 @@ export const POST = async (req: Request) => {
     )
   }
 }
+
+export const DELETE = async (req: Request) => {
+  try {
+    const id = new URL(req.url).searchParams.get("id")
+    if (!id) throw new Error("No se ha recibido el ID solicitado")
+
+    await connectToDB()
+    try {
+      await Inscription.findByIdAndDelete(id)
+
+      return NextResponse.json(
+        {
+          message: "Inscripción cancelada con éxito",
+        },
+        {
+          status: 200,
+          statusText: "OK",
+        }
+      )
+    } catch (error: any) {
+      return NextResponse.json(
+        {
+          message: error.message,
+        },
+        {
+          status: 500,
+          statusText: "Internal Server Error",
+        }
+      )
+    }
+  } catch (error: any) {
+    return NextResponse.json(
+      {
+        message: error.message,
+      },
+      {
+        status: 400,
+        statusText: "Bad Request",
+      }
+    )
+  }
+}

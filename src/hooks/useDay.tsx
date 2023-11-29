@@ -14,7 +14,19 @@ export const useDay = () => {
     }/${tomorrowDate.getFullYear()}`,
   }
 
+  todayDate.setDate(todayDate.getDate() - 1)
+  const today: Date = {
+    day: todayDate.getDate(),
+    month: todayDate.getMonth(),
+    year: todayDate.getFullYear(),
+    weekday: todayDate.getDay(),
+    dateString: `${WeekDay[todayDate.getDay()]}. ${todayDate.getDate()}/${
+      todayDate.getMonth() + 1
+    }/${todayDate.getFullYear()}`,
+  }
+
   return {
+    today,
     tomorrow,
   }
 }

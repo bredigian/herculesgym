@@ -13,13 +13,13 @@ import {
   NavbarMenuToggle,
   useDisclosure,
 } from "@nextui-org/react"
-import { usePathname, useRouter } from "next/navigation"
 
 import Image from "next/image"
 import Link from "next/link"
 import { ROUTES } from "@/constants/routes"
 import logo from "@/assets/images/logoHercules.png"
 import { useAuthStore } from "@/store/auth"
+import { usePathname } from "next/navigation"
 import { useState } from "react"
 
 const Header = () => {
