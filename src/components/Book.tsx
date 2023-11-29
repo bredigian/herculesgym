@@ -48,6 +48,7 @@ const Book = ({
             inscriptions={inscriptions}
             isDetailed={true}
             handleModal={handleModal}
+            day={day}
           />
           <aside className="self-end pr-3">
             <div className="flex items-center gap-1">

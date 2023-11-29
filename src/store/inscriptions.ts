@@ -38,13 +38,16 @@ export const useInscriptionsStore = create((set: any) => ({
     toast.success(message)
   },
 
-  deleteInscription: async (_id: string) => {
-    const response = await fetch(`${API_URL}/inscriptions?id=${_id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+  deleteInscription: async (_id: string, today: Date) => {
+    const response = await fetch(
+      `${API_URL}/inscriptions?id=${_id}&date=${JSON.stringify(today)}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
     const { message } = await response.json()
     if (!response.ok) throw new Error(message)
 

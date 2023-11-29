@@ -3,6 +3,7 @@ import { NextResponse } from "next/server"
 import { connectToDB } from "@/utils/mongoose"
 import { type Inscription as InscriptionT } from "@/types/inscription.types"
 import { type Date } from "@/types/date.types"
+import { inscriptionIsOld } from "@/utils/fx/verify"
 
 export const GET = async (req: Request) => {
   try {
@@ -123,10 +124,22 @@ export const POST = async (req: Request) => {
 export const DELETE = async (req: Request) => {
   try {
     const id = new URL(req.url).searchParams.get("id")
-    if (!id) throw new Error("No se ha recibido el ID solicitado")
+    const today: Date = JSON.parse(
+      new URL(req.url).searchParams.get("date") as string
+    )
+
+    if (!id || !today)
+      throw new Error("Ocurrió un error al obtener los parametros requeridos")
 
     await connectToDB()
     try {
+      const inscription: InscriptionT | null = await Inscription.findById(id)
+
+      if (!inscription) throw new Error("No se encontró la inscripción")
+
+      if (inscriptionIsOld(inscription.date, inscription.schedule))
+        throw new Error("No es posible cancelar una inscripción pasada")
+
       await Inscription.findByIdAndDelete(id)
 
       return NextResponse.json(

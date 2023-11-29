@@ -27,7 +27,7 @@ const Classes = () => {
   const { inscriptions, getInscriptions, createInscription } =
     useInscriptionsStore()
   const { user } = useAuthStore()
-  const { tomorrow } = useDay()
+  const { tomorrow, today } = useDay()
 
   const {
     register,
@@ -167,7 +167,11 @@ const Classes = () => {
               Todavía no estás inscripto en ninguna clase.
             </p>
           ) : (
-            <TableBook inscriptions={inscriptions} isDetailed={false} />
+            <TableBook
+              inscriptions={inscriptions}
+              isDetailed={false}
+              day={today}
+            />
           )}
           <Button
             type="submit"

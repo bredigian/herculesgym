@@ -10,15 +10,19 @@ import {
 import { COLUMNS } from "@/constants/columns"
 import { Inscription } from "@/types/inscription.types"
 import { IoCloseCircle } from "react-icons/io5"
+import { type Date as DateT } from "@/types/date.types"
+import { inscriptionIsOld } from "@/utils/fx/verify"
 
 const TableBook = ({
   inscriptions,
   isDetailed,
   handleModal,
+  day,
 }: {
   inscriptions: Inscription[]
   isDetailed?: boolean
   handleModal?: (_id: string) => void
+  day: DateT
 }) => {
   return (
     <Table removeWrapper aria-label="Inscriptions table">
@@ -45,18 +49,26 @@ const TableBook = ({
       </TableHeader>
       <TableBody>
         {inscriptions.map((item) => {
+          const isOld = inscriptionIsOld(day, item.schedule)
+
           if (isDetailed) {
             return (
-              <TableRow key={item._id}>
+              <TableRow
+                className={isOld ? "opacity-25" : "opacity-100"}
+                key={item._id}
+              >
                 <TableCell className="text-xs">{item.class.name}</TableCell>
                 <TableCell className="text-end font-semibold text-xs">
                   {item.schedule}
                 </TableCell>
-
                 <TableCell className="flex flex-col items-end">
                   <IoCloseCircle
                     onClick={
-                      handleModal ? () => handleModal(item._id as string) : null
+                      handleModal
+                        ? !isOld
+                          ? () => handleModal(item._id as string)
+                          : null
+                        : null
                     }
                     className="text-purple-bold text-lg"
                   />

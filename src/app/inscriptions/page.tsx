@@ -77,7 +77,7 @@ const Inscriptions = () => {
   const onDeleteInscription = async () => {
     setDeleting(true)
     try {
-      await deleteInscription(inscriptionToDelete)
+      await deleteInscription(inscriptionToDelete, today)
       await getInscriptions(user?._id as string, day)
       onClose()
     } catch (error: any) {
@@ -125,7 +125,11 @@ const Inscriptions = () => {
           </ModalHeader>
           <ModalFooter>
             <Button onClick={onClose}>Atrás</Button>
-            <Button isLoading={deleting} onClick={onDeleteInscription}>
+            <Button
+              className="bg-purple-bold text-white"
+              isLoading={deleting}
+              onClick={onDeleteInscription}
+            >
               Confirmar
             </Button>
           </ModalFooter>
