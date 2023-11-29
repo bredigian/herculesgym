@@ -1,6 +1,7 @@
 import Inscription from "@/models/Inscription"
 import { NextResponse } from "next/server"
 import { connectToDB } from "@/utils/mongoose"
+import { type Inscription as InscriptionT } from "@/types/inscription.types"
 
 export const GET = async (req: Request) => {
   try {
@@ -10,11 +11,30 @@ export const GET = async (req: Request) => {
     await connectToDB()
 
     try {
-      const inscriptions = await Inscription.find({ "user._id": id })
+      const inscriptions: InscriptionT[] = await Inscription.find({
+        "user._id": id,
+      })
+      const sortedInscriptions = inscriptions.sort((a, b) => {
+        const dateA: any = new Date(
+          a.date.year,
+          a.date.month,
+          a.date.day,
+          parseInt(a.schedule.split(":")[0]),
+          parseInt(a.schedule.split(":")[1])
+        )
+        const dateB: any = new Date(
+          b.date.year,
+          b.date.month,
+          b.date.day,
+          parseInt(b.schedule.split(":")[0]),
+          parseInt(b.schedule.split(":")[1])
+        )
+        return dateA - dateB
+      })
       return NextResponse.json(
         {
           message: "Inscripciones obtenidas con éxito",
-          inscriptions,
+          inscriptions: sortedInscriptions,
         },
         {
           status: 200,

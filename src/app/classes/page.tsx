@@ -163,6 +163,7 @@ const Classes = () => {
               errorMessage={errors?.schedule?.message}
               isInvalid={!!errors?.schedule}
               isDisabled={schedules.length === 0}
+              disabledKeys={inscriptions.map((item) => item.schedule)}
             >
               {schedules?.map((item) => {
                 return (
@@ -197,7 +198,7 @@ const Classes = () => {
                   return (
                     <TableRow key={item._id}>
                       <TableCell>{item.class.name}</TableCell>
-                      <TableCell className="text-end">
+                      <TableCell className="text-end font-semibold">
                         {item.schedule}
                       </TableCell>
                     </TableRow>
