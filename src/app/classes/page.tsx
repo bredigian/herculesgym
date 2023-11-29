@@ -16,6 +16,7 @@ import {
 import { useEffect, useState } from "react"
 
 import { COLUMNS } from "@/constants/columns"
+import { Class } from "@/types/classes.types"
 import { Inscription } from "@/types/inscription.types"
 import { Schedule } from "@/types/schedule.types"
 import Screen from "@/components/Screen"
@@ -26,6 +27,7 @@ import { useAuthStore } from "@/store/auth"
 import { useClassesStore } from "@/store/classes"
 import { useDay } from "@/hooks/useDay"
 import { useForm } from "react-hook-form"
+import { useInscriptionsStore } from "@/store/inscriptions"
 
 interface FormData {
   class: string
@@ -33,7 +35,9 @@ interface FormData {
 }
 
 const Classes = () => {
-  const { classes, getClasses, registerClass } = useClassesStore()
+  const { classes, getClasses } = useClassesStore()
+  const { inscriptions, getInscriptions, createInscription } =
+    useInscriptionsStore()
   const { user } = useAuthStore()
   const { tomorrow } = useDay()
 
@@ -42,31 +46,35 @@ const Classes = () => {
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
   } = useForm<FormData>()
 
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
 
   const [schedules, setSchedules] = useState<Schedule[]>([])
+  const [selectedClass, setSelectedClass] = useState<Class | null>(null)
 
-  const handleChangeSchedules = (value: string) => {
+  const handleChangeSchedules = () => {
     setValue("schedule", "")
-    if (!value) {
+    if (!selectedClass) {
       setSchedules([])
       return
     }
-    const selectedClass = classes?.find((item) => item.value === value)
-    const day = selectedClass?.days.find(
+    const day = selectedClass?.days?.find(
       (item) => item.weekday === tomorrow.weekday
     )
     if (day) setSchedules(day?.schedules)
   }
 
-  const rows: any = []
+  useEffect(() => {
+    handleChangeSchedules()
+  }, [selectedClass])
 
   const fetchData = async () => {
     try {
       await getClasses(tomorrow)
+      await getInscriptions(user?._id as string)
     } catch (error: any) {
       toast.error(error.message)
     }
@@ -76,16 +84,23 @@ const Classes = () => {
   const onSubmit = async (formData: FormData) => {
     setSubmitting(true)
     const inscription: Inscription = {
-      class: formData.class,
+      class: {
+        _id: selectedClass?._id as string,
+        value: selectedClass?.value as string,
+        name: selectedClass?.name as string,
+      },
       schedule: formData.schedule,
       date: tomorrow,
       user: {
         name: user?.name as string,
         username: user?.username as string,
+        _id: user?._id,
       },
     }
     try {
-      await registerClass(inscription)
+      await createInscription(inscription)
+      await getInscriptions(user?._id as string)
+      reset()
     } catch (error: any) {
       toast.error(error.message)
     }
@@ -119,7 +134,10 @@ const Classes = () => {
                   message: "Tenés que seleccionar una clase",
                 },
                 onChange: (e) => {
-                  handleChangeSchedules(e.target.value)
+                  const selectedClass = classes?.find(
+                    (item) => item.value === e.target.value
+                  )
+                  setSelectedClass(selectedClass as Class)
                 },
               })}
               errorMessage={errors?.class?.message}
@@ -155,7 +173,7 @@ const Classes = () => {
               })}
             </Select>
           </section>
-          {rows.length === 0 ? (
+          {inscriptions.length === 0 ? (
             <p className="text-sm">
               Todavía no estás inscripto en ninguna clase.
             </p>
@@ -174,22 +192,17 @@ const Classes = () => {
                   </TableColumn>
                 )}
               </TableHeader>
-              <TableBody items={rows}>
-                {(row) => (
-                  <TableRow key={row.class}>
-                    {(columnKey) => (
-                      <TableCell
-                        className={`${
-                          columnKey === "class"
-                            ? "text-start font-medium"
-                            : "text-end font-semibold"
-                        }`}
-                      >
-                        {getKeyValue(row, columnKey)}
+              <TableBody>
+                {inscriptions.map((item) => {
+                  return (
+                    <TableRow key={item._id}>
+                      <TableCell>{item.class.name}</TableCell>
+                      <TableCell className="text-end">
+                        {item.schedule}
                       </TableCell>
-                    )}
-                  </TableRow>
-                )}
+                    </TableRow>
+                  )
+                })}
               </TableBody>
             </Table>
           )}

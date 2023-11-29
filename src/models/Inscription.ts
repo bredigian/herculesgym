@@ -1,5 +1,6 @@
 import { Schema, model, models } from "mongoose"
 
+import { ClassSchema } from "./Class"
 import { Date } from "@/types/date.types"
 import { Inscription } from "@/types/inscription.types"
 import { UserSchema } from "./User"
@@ -29,7 +30,7 @@ const DateSchema = new Schema<Date>({
 
 const InscriptionSchema = new Schema<Inscription>({
   class: {
-    type: String,
+    type: ClassSchema,
     required: true,
   },
   date: {

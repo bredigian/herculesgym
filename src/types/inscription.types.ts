@@ -1,8 +1,10 @@
+import { Class } from "./classes.types"
 import { Date } from "./date.types"
 import { User } from "./user.types"
 
 export interface Inscription {
-  class: string
+  _id?: string
+  class: Class
   schedule: string
   date: Date
   user: User
