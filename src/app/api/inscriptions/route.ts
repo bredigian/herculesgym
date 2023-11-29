@@ -2,17 +2,25 @@ import Inscription from "@/models/Inscription"
 import { NextResponse } from "next/server"
 import { connectToDB } from "@/utils/mongoose"
 import { type Inscription as InscriptionT } from "@/types/inscription.types"
+import { type Date } from "@/types/date.types"
 
 export const GET = async (req: Request) => {
   try {
     const id = new URL(req.url).searchParams.get("id")
-    if (!id) throw new Error("No se ha recibido el ID solicitado")
+    const tomorrow: Date = JSON.parse(
+      new URL(req.url).searchParams.get("date") as string
+    )
+
+    if (!id || !tomorrow) throw new Error("No se ha recibido el ID solicitado")
 
     await connectToDB()
 
     try {
       const inscriptions: InscriptionT[] = await Inscription.find({
         "user._id": id,
+        "date.day": tomorrow.day,
+        "date.month": tomorrow.month,
+        "date.year": tomorrow.year,
       })
       const sortedInscriptions = inscriptions.sort((a, b) => {
         const dateA: any = new Date(
@@ -31,6 +39,7 @@ export const GET = async (req: Request) => {
         )
         return dateA - dateB
       })
+
       return NextResponse.json(
         {
           message: "Inscripciones obtenidas con éxito",

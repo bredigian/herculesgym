@@ -11,12 +11,12 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-  getKeyValue,
 } from "@nextui-org/react"
 import { useEffect, useState } from "react"
 
 import { COLUMNS } from "@/constants/columns"
 import { Class } from "@/types/classes.types"
+import { Date } from "@/types/date.types"
 import { Inscription } from "@/types/inscription.types"
 import { Schedule } from "@/types/schedule.types"
 import Screen from "@/components/Screen"
@@ -74,7 +74,7 @@ const Classes = () => {
   const fetchData = async () => {
     try {
       await getClasses(tomorrow)
-      await getInscriptions(user?._id as string)
+      await getInscriptions(user?._id as string, tomorrow)
     } catch (error: any) {
       toast.error(error.message)
     }
@@ -99,7 +99,7 @@ const Classes = () => {
     }
     try {
       await createInscription(inscription)
-      await getInscriptions(user?._id as string)
+      await getInscriptions(user?._id as string, tomorrow)
       reset()
     } catch (error: any) {
       toast.error(error.message)
