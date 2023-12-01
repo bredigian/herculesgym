@@ -19,7 +19,7 @@ export const ROUTES: Route[] = [
     icon: IoCube,
   },
   {
-    name: "Inscripciones",
+    name: "Cronograma",
     path: "/inscriptions",
     icon: FaCheckSquare,
   },

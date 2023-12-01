@@ -107,7 +107,7 @@ const Inscriptions = () => {
 
   return (
     <Screen>
-      <Title>Inscripciones</Title>
+      <Title>Cronograma</Title>
       <Subtitle>
         Visuzalizarás las clases reservadas y podrás cancelar la que desees
       </Subtitle>
