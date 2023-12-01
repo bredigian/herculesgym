@@ -10,6 +10,7 @@ import Screen from "@/components/Screen"
 import Subtitle from "@/components/Subtitle"
 import TableBook from "@/components/TableBook"
 import Title from "@/components/Title"
+import { UserRoles } from "@/types/user.types"
 import { toast } from "sonner"
 import { useAuthStore } from "@/store/auth"
 import { useClassesStore } from "@/store/classes"
@@ -82,6 +83,7 @@ const Classes = () => {
       user: {
         name: user?.name as string,
         username: user?.username as string,
+        role: UserRoles.USER,
         _id: user?._id,
       },
     }

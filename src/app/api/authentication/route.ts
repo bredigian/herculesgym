@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { type User as UserType } from "@/types/user.types"
+import { UserRoles, type User as UserType } from "@/types/user.types"
 import { connectToDB } from "@/utils/mongoose"
 import User from "@/models/User"
 import { formatName } from "@/utils/fx/format"
@@ -23,6 +23,7 @@ export const POST = async (req: Request) => {
       ...userdata,
       name: formattedName,
       password: hashedPassword,
+      role: UserRoles.USER,
     })
 
     const savedUser = await user.save()

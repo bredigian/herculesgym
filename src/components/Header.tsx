@@ -13,10 +13,12 @@ import {
   NavbarMenuToggle,
   useDisclosure,
 } from "@nextui-org/react"
+import { FaUser, FaUserLock } from "react-icons/fa6"
+import { PRIVATE_ROUTES, ROUTES } from "@/constants/routes"
 
 import Image from "next/image"
 import Link from "next/link"
-import { ROUTES } from "@/constants/routes"
+import { UserRoles } from "@/types/user.types"
 import logo from "@/assets/images/logoHercules.png"
 import { useAuthStore } from "@/store/auth"
 import { usePathname } from "next/navigation"
@@ -25,7 +27,7 @@ import { useState } from "react"
 const Header = () => {
   const [theme, setTheme] = useState("bg-transparent")
   const pathname = usePathname()
-  const { user, signOut } = useAuthStore()
+  const { user, role, signOut } = useAuthStore()
 
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
 
@@ -58,22 +60,40 @@ const Header = () => {
       <NavbarContent>
         <Image src={logo} alt="Hércules Logo" width={60} height={60} />
       </NavbarContent>
-      <NavbarContent justify="end">
-        <p className="font-bold text-sm">{user?.name}</p>
+      <NavbarContent justify="center">
+        {role === UserRoles.USER ? (
+          <FaUser className="text-base" />
+        ) : (
+          <FaUserLock className="text-base" />
+        )}
+        <p className="font-bold text-xs">{user?.name}</p>
       </NavbarContent>
       <NavbarMenu>
-        {ROUTES.map((route) => {
-          return (
-            <Link key={route.path} href={route.path}>
-              <NavbarMenuItem
-                onClick={() => setIsMenuOpen(false)}
-                isActive={pathname === route.path}
-              >
-                {route.name}
-              </NavbarMenuItem>
-            </Link>
-          )
-        })}
+        {role === UserRoles.USER
+          ? ROUTES.map((route) => {
+              return (
+                <Link key={route.path} href={route.path}>
+                  <NavbarMenuItem
+                    onClick={() => setIsMenuOpen(false)}
+                    isActive={pathname === route.path}
+                  >
+                    {route.name}
+                  </NavbarMenuItem>
+                </Link>
+              )
+            })
+          : PRIVATE_ROUTES.map((route) => {
+              return (
+                <Link key={route.path} href={route.path}>
+                  <NavbarMenuItem
+                    onClick={() => setIsMenuOpen(false)}
+                    isActive={pathname === route.path}
+                  >
+                    {route.name}
+                  </NavbarMenuItem>
+                </Link>
+              )
+            })}
         <NavbarMenuItem onClick={onOpen} className="text-danger">
           Salir
         </NavbarMenuItem>

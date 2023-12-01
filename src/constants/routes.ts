@@ -24,3 +24,20 @@ export const ROUTES: Route[] = [
     icon: FaCheckSquare,
   },
 ]
+
+export const PRIVATE_ROUTES: Route[] = [
+  {
+    name: "Inicio",
+    path: "/administrator",
+  },
+  {
+    name: "Clases",
+    path: "/administrator/classes",
+    icon: FaCalendarPlus,
+  },
+  {
+    name: "Packs",
+    path: "/administrator/packs",
+    icon: IoCube,
+  },
+]

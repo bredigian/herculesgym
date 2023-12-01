@@ -40,7 +40,7 @@ export const Auth = () => {
   }
 
   return (
-    <Screen>
+    <Screen isAuth>
       <Image
         src={logo}
         alt="Hércules Logo"

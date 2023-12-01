@@ -1,10 +1,12 @@
+import { User, UserRoles } from "@/types/user.types"
+
 import { API_URL } from "@/constants/api"
-import { User } from "@/types/user.types"
 import { create } from "zustand"
 
 export const useAuthStore = create((set: any) => ({
   user: null as User | null,
   token: null as string | null,
+  role: null as UserRoles | null,
 
   signUp: async (userdata: User) => {
     const response = await fetch(`${API_URL}/authentication`, {
@@ -43,7 +45,7 @@ export const useAuthStore = create((set: any) => ({
 
     localStorage.setItem("token", token)
     localStorage.setItem("user_id", user._id as string)
-    set({ user, token })
+    set({ user, token, role: user.role })
   },
 
   signOut: () => {
@@ -73,7 +75,7 @@ export const useAuthStore = create((set: any) => ({
         set({ token: null, user: null })
       } else {
         const { user }: { user: User } = await response.json()
-        set({ user, token })
+        set({ user, token, role: user.role })
       }
     }
   },

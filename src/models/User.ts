@@ -18,6 +18,12 @@ export const UserSchema = new Schema<User>(
       type: String,
       trim: true,
     },
+    role: {
+      type: String,
+      required: true,
+      trim: true,
+      enum: ["ADMIN", "USER"],
+    },
   },
   {
     timestamps: true,
