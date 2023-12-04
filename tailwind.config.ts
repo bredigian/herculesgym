@@ -17,7 +17,7 @@ const config: Config = {
       },
       colors: {
         purple: {
-          regular: "#3B3F7750",
+          regular: "#3B3F7765",
           bold: "#3B3F77",
         },
       },

@@ -1,11 +1,14 @@
 import MenuItem from "./MenuItem"
-import { ROUTES } from "@/constants/routes"
+import { Route } from "@/types/route.types"
 
-const Menu = () => {
+const Menu = ({ routes }: { routes: Route[] }) => {
   return (
     <section className="flex flex-col gap-4 items-center w-full">
-      {ROUTES.map((item) => {
-        if (item.path !== "/") return <MenuItem key={item.path} data={item} />
+      {routes.map((item) => {
+        if (item.path !== "/") {
+          if (item.path !== "/administrator")
+            return <MenuItem key={item.path} data={item} />
+        }
       })}
     </section>
   )

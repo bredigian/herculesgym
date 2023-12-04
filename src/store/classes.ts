@@ -6,16 +6,13 @@ import { create } from "zustand"
 export const useClassesStore = create((set: any) => ({
   classes: [] as Class[],
 
-  getClasses: async (tomorrow: Date) => {
-    const response = await fetch(
-      `${API_URL}/classes?weekday=${tomorrow?.weekday}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
+  getClasses: async (day: Date) => {
+    const response = await fetch(`${API_URL}/classes?weekday=${day?.weekday}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
     const { message, classes }: { message: string; classes: Class[] } =
       await response.json()
     if (!response.ok) throw new Error(message)

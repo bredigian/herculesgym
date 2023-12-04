@@ -50,7 +50,6 @@ const TableBook = ({
       <TableBody>
         {inscriptions.map((item) => {
           const isOld = inscriptionIsOld(day, item.schedule)
-
           if (isDetailed) {
             return (
               <TableRow
